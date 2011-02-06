@@ -1,5 +1,4 @@
-{"total_rows":3,"offset":0,"rows":[
+{"total_rows":2,"offset":0,"rows":[
 {"id":"common-mammals","key":["common-mammals"],"value":"Common Mammals"},
-{"id":"common-mammals-2","key":["common-mammals-2"],"value":"Common Mammals II"},
 {"id":"eutherian-mammals","key":["eutherian-mammals"],"value":"Eutherian Mammals (Miyamoto & Goodman)"}
 ]}
