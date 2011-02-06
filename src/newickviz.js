@@ -80,6 +80,15 @@
           if (ndata.label===undefined) ndata.label = nname
         })
         sys.merge(network)
+		sys.eachEdge(function(edge) {
+			edgedata = network.edges[edge.source.name][edge.target.name];
+			if (edge.length != edgedata.length) {
+				console.log(edge);
+				console.log("" + edge.length + " " + edgedata.length);
+				sys.pruneEdge(edge);
+				sys.addEdge(edge.source, edge.target, edgedata);
+			}
+		});
         _updateTimeout = null
       },
       

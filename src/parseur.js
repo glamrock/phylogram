@@ -84,7 +84,7 @@
         }
 
         if (definition.length > 0) {
-			console.log(definition);
+			//console.log(definition);
             defsplit = definition.split(':');
             me.name = defsplit[0];
             if (defsplit.length > 1) {
@@ -123,6 +123,14 @@
 				var tree = new Node();	
 				tree.parse(data);
 
+
+				var maxlength = 0;
+
+				tree.recurse(function(node) {
+					if (node.length && node.length > maxlength)
+						maxlength = node.length;
+				});
+
 				var max_id = 0;
 				tree.recurse(function(node) {
 					node.id = ++max_id;
@@ -132,7 +140,8 @@
 					if (node.parent) {
 						var edge = { src: node.parent.id, dst: node.id };
 						edges[edge.src] = edges[edge.src]||{};
-						edges[edge.src][edge.dst] = { length: 2 };
+						edges[edge.src][edge.dst] = { }
+						if (node.length) edges[edge.src][edge.dst].length = (node.length/maxlength)*10;
 					}
 				});
 
