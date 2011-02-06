@@ -20,8 +20,8 @@
 		node.parse(data);
 
 		me.totalLeaves += node.totalLeaves;
-		me.totalDescendants += 1
-		me.totalDescendants += node.totalDescendants
+		me.totalDescendants += 1;
+		me.totalDescendants += node.totalDescendants;
 
 		me.children.push(node);
     }
@@ -46,6 +46,7 @@
 
             if (data[i] == "'") {
                 quoted = !quoted;
+				addCurrent();
             } else if (quoted) {
                 addCurrent();
             } else {
@@ -85,7 +86,7 @@
 
         if (definition.length > 0) {
             defsplit = definition.split(':');
-            me.name = defsplit[0];
+            me.name = defsplit[0].replace(/'/g, '');
             if (defsplit.length > 1) {
                 me.length = parseFloat(defsplit[1]);
             }
