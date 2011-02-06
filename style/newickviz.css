@@ -89,7 +89,7 @@ a.update{
   top:10px;
   left:10px;
   right:10px;
-  background:#5cbc58 url(newickviz.png) 10px 8px no-repeat;
+  background:#e2eee3 url(newickviz.png) 10px 8px no-repeat;
   border-radius:4px;
   padding:0;
 }
@@ -99,7 +99,7 @@ a.update{
   display:block;
   top:10px;
   left:10px;
-  width:88px;
+  width:105px;
   height:33px;
   text-indent:-9999px;
   vertical-align:bottom;
@@ -188,6 +188,16 @@ a.update{
 #dashboard .controls li span{
   font:32px Arial;
   margin-left:4px;
+}
+
+#dashboard .controls .pause {
+	float: right;
+}
+
+#dashboard .controls .pause span {
+	font:30px Arial;
+	position: relative;
+	bottom: 3px;
 }
 
 .frob,
@@ -419,7 +429,7 @@ a.update{
   padding:0px 20px;
   max-width:270px;
   font:14px/18px "Times New Roman", serif;
-  background:#eeeee2;
+  background:#e2eee3;
   border-radius:4px;
 }
 
@@ -440,7 +450,7 @@ a.update{
 }
 
 #intro p a{
-  color:#D36E00;
+  color:#d39000;
   text-decoration:none;
 }
 #intro p a:hover{

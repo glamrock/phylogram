@@ -84,7 +84,6 @@
         }
 
         if (definition.length > 0) {
-			//console.log(definition);
             defsplit = definition.split(':');
             me.name = defsplit[0];
             if (defsplit.length > 1) {
@@ -98,7 +97,6 @@
             me.finalDescendant = me.children[me.children.length-1].finalDescendant;
         }
 
-        //console.log(data + " " + me.name + " " + me.length);
     }
 
     function recurse(callback) {
@@ -123,27 +121,28 @@
 				var tree = new Node();	
 				tree.parse(data);
 
+				if (tree.totalDescendants > 0) {
+					var maxlength = 0;
 
-				var maxlength = 0;
+					tree.recurse(function(node) {
+						if (node.length && node.length > maxlength)
+							maxlength = node.length;
+					});
 
-				tree.recurse(function(node) {
-					if (node.length && node.length > maxlength)
-						maxlength = node.length;
-				});
+					var max_id = 0;
+					tree.recurse(function(node) {
+						node.id = ++max_id;
 
-				var max_id = 0;
-				tree.recurse(function(node) {
-					node.id = ++max_id;
+						nodes[node.id] = { label: node.name };
 
-					nodes[node.id] = { label: node.name };
-
-					if (node.parent) {
-						var edge = { src: node.parent.id, dst: node.id };
-						edges[edge.src] = edges[edge.src]||{};
-						edges[edge.src][edge.dst] = { }
-						if (node.length) edges[edge.src][edge.dst].length = (node.length/maxlength)*10;
-					}
-				});
+						if (node.parent) {
+							var edge = { src: node.parent.id, dst: node.id };
+							edges[edge.src] = edges[edge.src]||{};
+							edges[edge.src][edge.dst] = { truelen: node.length }
+							if (globalSettings['lengths'] && node.length) edges[edge.src][edge.dst].length = (node.length/maxlength)*(globalSettings['length_strength']/20);
+						}
+					});
+				}
 
 				return { nodes: nodes, edges: edges }
 			}

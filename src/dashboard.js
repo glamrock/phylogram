@@ -1,4 +1,5 @@
 (function(){
+  globalSettings = window.globalSettings || { lengths: true, length_strength: 200 }
   
   //
   // the parameter-setting ui at the top of the screen
@@ -27,7 +28,8 @@
     var _ranges = {
       stiffness:[0,15000],
       repulsion:[0,100000],
-      friction:[0,1]
+      friction:[0,1],
+	  length_strength: [0,1000]
     }
     var _state = null
     
@@ -40,10 +42,12 @@
         // click + drag on param values to modify them
         dom.find('.frob').mousedown(that.beginFrobbing)
         dom.find('img').mousedown(function(){  return false })
-        dom.find('.toggle').click(that.toggleGravity)
+        dom.find('.gravity .toggle').click(that.toggleGravity)
+        dom.find('.lengths .toggle').click(that.toggleLengths)
+		dom.find('.pause').click(that.togglePause);
 
         $('.help').click(that.showHelp)
-        dom.find('.about').click(that.showIntro)
+        dom.find('.about').click(that.toggleIntro)
         $("#intro h1 a").click(that.hideIntro)
         
         $(that.helpPanel).bind('closed', that.hideHelp)
@@ -51,6 +55,21 @@
       },
       
       update:function(){
+
+		dom.find('.lengths .toggle').text(globalSettings['lengths'] ? "On" : "Off");
+
+		dom.find('.pause .toggle').text(globalSettings['paused'] ? "unpause" : "pause");
+
+		if (globalSettings['lengths']) {
+			$('.length_strength').show();
+			var ls = globalSettings['length_strength'];
+			var lsfrob = dom.find('.length_strength .frob')
+			lsfrob.text(ordinalize(ls));
+			lsfrob.data('param', 'length_strength');
+			lsfrob.data('val', ls);
+		} else {
+			$('.length_strength').hide();
+		}
         $.each(sys.parameters(), function(param, val){
           if (param=='gravity'){
             dom.find('.gravity .toggle').text(val?"Center":"Off")
@@ -75,6 +94,14 @@
         trace('closed')
         dom.find('.help').fadeIn()
       },
+
+	  toggleIntro: function(e) {
+	  	if ($("#intro").css('display') == 'block') {
+			that.hideIntro();
+		} else {
+			that.showIntro();
+		}
+	  },
       
       showIntro:function(e){
         var intro = $("#intro")
@@ -95,11 +122,34 @@
         })
         return false
       },
+
+	  togglePause: function(e) {
+		globalSettings['paused'] = !globalSettings['paused'];
+
+		if (globalSettings['paused']) {
+			sys.stop();
+		} else {
+			sys.start();
+
+			// HACK (Daniel): sys.start() is useless >:|
+			sys.eachNode(function(node) {
+				node.p.x = node.p.x;
+			});
+		}
+
+		that.update();
+	  },
       
       toggleGravity:function(e){
         var oldGravity = sys.parameters().gravity
         sys.parameters({gravity:!oldGravity})
         that.update()
+      },
+
+      toggleLengths:function(e){
+	  	globalSettings['lengths'] = !globalSettings['lengths'];
+        that.update()
+		mcp.updateGraph();
       },
       
       beginFrobbing:function(e){
@@ -156,9 +206,14 @@
                   .data('val', new_val)
         
         // let the particle system know about the change
-        var new_param = {}
-        new_param[_state.param] = new_val
-        sys.parameters(new_param)
+		if (_state.param == 'length_strength') {
+			globalSettings['length_strength'] = new_val;
+			mcp.updateGraph();
+		} else {
+			var new_param = {}
+			new_param[_state.param] = new_val
+			sys.parameters(new_param)
+		}
         
         return false
       },

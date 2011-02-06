@@ -88,6 +88,13 @@
             ctx.stroke()
           ctx.restore()
 
+		  if (edge.data.truelen && globalSettings['lengths']) {
+            ctx.font = "12px Helvetica"
+            ctx.textAlign = "center"
+            ctx.fillStyle = "black"
+            ctx.fillText(edge.data.truelen, tail.x+(head.x-tail.x)/2, tail.y+(head.y-tail.y)/2)
+		  }
+
           // draw an arrowhead if this is a -> style edge
           if (edge.data.directed){
             ctx.save()
@@ -128,6 +135,7 @@
         // for moves and mouseups while dragging
         var handler = {
           clicked:function(e){
+		  	if (globalSettings['paused']) return false;
             var pos = $(canvas).offset();
             _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
             selected = nearest = dragged = particleSystem.nearest(_mouseP);

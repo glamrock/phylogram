@@ -64,9 +64,10 @@
       },
 
       newDoc:function(){
-        var lorem = "; some example nodes\nhello {color:red, label:HELLO}\nworld {color:orange}\n\n; some edges\nhello -> world {color:yellow}\nfoo -> bar {weight:5}\nbar -> baz {weight:2}"
+        /*var lorem = "; some example nodes\nhello {color:red, label:HELLO}\nworld {color:orange}\n\n; some edges\nhello -> world {color:yellow}\nfoo -> bar {weight:5}\nbar -> baz {weight:2}"
         
-        _code.val(lorem).focus()
+        _code.val(lorem).focus()*/
+		_code.val("");
         $.address.value("")
         that.updateGraph()
         that.resize()
@@ -83,8 +84,6 @@
 		sys.eachEdge(function(edge) {
 			edgedata = network.edges[edge.source.name][edge.target.name];
 			if (edge.length != edgedata.length) {
-				console.log(edge);
-				console.log("" + edge.length + " " + edgedata.length);
 				sys.pruneEdge(edge);
 				sys.addEdge(edge.source, edge.target, edgedata);
 			}
@@ -157,7 +156,7 @@
 
 
   $(document).ready(function(){
-    var mcp = NewickViz("#newickviz")    
+    mcp = NewickViz("#newickviz")    
   })
 
   

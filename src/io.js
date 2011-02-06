@@ -15,9 +15,7 @@
         _dialog.find('li>a').live('click', that.exampleClick)
 
         $.getJSON("library/toc.json", function(resp){
-          _dialog.append($("<h1>Choose Your Own Adventure</h1>"))
           $.each(resp.rows, function(i, row){
-            if (row.key[0]!='cyoa') return
             var title = row.value
             var stub = row.id
             var book = $("<li><a href='#'></a></li>")
@@ -26,22 +24,11 @@
             _dialog.append(book)
           })
 
-          _dialog.append($("<h1>Doodles</h1>"))
-          $.each(resp.rows, function(i, row){
-            if (row.key[0]!='doodle') return
-            var title = row.value
-            var stub = row.id
-            var doodle = $("<li><a href='#'></a></li>")
-            doodle.attr('class', stub.replace(/[^a-z0-9\-\_\+]/g,''))
-            doodle.find('a').text(title)
-            _dialog.append(doodle)
-          })
-
 
           if ($.address.value()=="/"){
             var n = resp.total_rows
             var books = _dialog.find('a')
-            var randBook = resp.rows[Math.floor(Math.random()*n)].id
+            var randBook = resp.rows[0].id //[Math.floor(Math.random()*n)].id
             $.address.value(randBook)
           }
           
